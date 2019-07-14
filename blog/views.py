@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.views.generic import (
     ListView,
     DetailView,
@@ -78,3 +79,11 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})
+
+
+def search(request):
+    template='blog/home.html'
+    query=request.GET.get('q')
+    results=Post.objects.filter(Q( title__icontains=query))
+    # results=results.objects.all()
+    return render(request,'blog/home.html', {'post': results})
