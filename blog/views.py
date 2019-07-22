@@ -84,6 +84,7 @@ def about(request):
 def search(request):
     template='blog/home.html'
     query=request.GET.get('q')
-    results=Post.objects.filter(Q( title__icontains=query))
+    results=Post.objects.filter(Q(author__username__icontains=query)|Q(title__icontains=query)|Q(content__icontains=query))
+    print(results)
     # results=results.objects.all()
-    return render(request,'blog/home.html', {'post': results})
+    return render(request,'blog/home.html', {'posts': results})
